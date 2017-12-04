@@ -1,3 +1,5 @@
+-- A
+
 distance :: Int -> Int
 distance input = distance' input 2 2 3 1 1 2
 
@@ -11,3 +13,12 @@ distance' input value modInc modulus middle increments startValue | calcMod modu
                                                                     calcMod n1 n2 = (n1 `mod` n2)
                                                                     checkModInc = increments
                                                                     (stepsToMiddle, incTrue) = (abs ( (modulus-value) - (ceiling (fromIntegral (modulus-startValue) / fromIntegral 2))), (if ((increments `mod` 4 == 0)) then True else False))
+
+-- B
+
+largerThanValue :: Int -> Int
+largerThanValue number = largerThanValue' number []
+
+largerThanValue' :: Int -> [Int] -> Int
+largerThanValue number neighbours | sum [neighbours] > number = sum [neighbours]
+                                  | otherwise = neighbours
