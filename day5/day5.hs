@@ -1,4 +1,5 @@
 import Data.Sequence
+import Control.DeepSeq
 
 readInput :: FilePath -> IO Int
 readInput path = do
@@ -15,13 +16,13 @@ parseStringArray list = [read element :: Int | element <- list]
 -- A
 
 findExit :: Seq Int -> Int -> Int -> Int -> Int -> Int
-findExit list i steps stepSize l | (i) < (l) && (i) >= (-1) = ($!) findExit  updatedList (newIndex) (steps+1) (index updatedList newIndex) l
+findExit list i steps stepSize l | (i) < (l) && (i) >= (-1) = findExit  updatedList (newIndex) (steps+1) (index updatedList newIndex) l
                                | otherwise = steps
                                where (updatedList,newIndex) = ((update i (stepSize+1) $ list), (i+stepSize))
 
 -- B
 
 findExitB :: Seq Int -> Int -> Int -> Int -> Int -> Int
-findExitB list i steps stepSize l | (i) < (l) && (i) >= (-1) = ($!) findExitB updatedList (newIndex) (steps+1) (index updatedList (newIndex)) l
+findExitB list i steps stepSize l | (i) < (l) && (i) >= (-1) = findExitB updatedList (newIndex) (deepseq steps (steps+1)) (index updatedList (newIndex)) l
                                   | otherwise = steps
-                                where (updatedList,newIndex,incrementCount) = ((update i (stepSize+incrementCount) $ list),(i+stepSize),(if stepSize >= 3 then -1 else 1))
+                                where (updatedList,newIndex,incrementCount) = (deepseq list (update i ((stepSize +incrementCount)) $ list ),(i+stepSize),(if stepSize >= 3 then -1 else 1))
