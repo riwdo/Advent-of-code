@@ -17,8 +17,10 @@ distance' input value modInc modulus middle increments startValue | calcMod modu
 -- B
 
 largerThanValue :: Int -> Int
-largerThanValue number = largerThanValue' number []
+largerThanValue number = largerThanValue' number [1]
 
-largerThanValue' :: Int -> [Int] -> Int
-largerThanValue number neighbours | sum [neighbours] > number = sum [neighbours]
-                                  | otherwise = neighbours
+largerThanValue' :: Int -> [Int] -> Int -> Int
+largarThanValue' number [1] 2 = largerThanValue' number $ neighbours ++ [element | element <- neighbours]
+largerThanValue' number neighbours sndNeighbourMod  | calc > number = calc
+                                                   | otherwise = largerThanValue' number (neighbours++calc)
+                                                    where (summation,l,calc) = (0, length neighbours - 1, sndNeighbourMod `mod` l == 0 = fst neighbours + snd neighbours + (neighbours !! 0))
