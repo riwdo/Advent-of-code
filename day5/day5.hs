@@ -1,14 +1,27 @@
+import Data.Sequence
+
 readInput :: FilePath -> IO Int
 readInput path = do
       content <- readFile path
       let list = parseStringArray (lines content)
       --return list
-      return (findExit list 0 0 (head list))
+      let sequenc = fromList list
+      return (findExitB sequenc 0 0 (head list) (Data.Sequence.length sequenc))
+
 
 parseStringArray :: [String] -> [Int]
 parseStringArray list = [read element :: Int | element <- list]
 
-findExit :: [Int] -> Int -> Int -> Int -> Int
-findExit list i steps stepSize | (i) < (length list) && (i) >= (-1) = findExit updatedList (newIndex) (steps+1) (updatedList !! (newIndex))
+-- A
+
+findExit :: Seq Int -> Int -> Int -> Int -> Int -> Int
+findExit list i steps stepSize l | (i) < (l) && (i) >= (-1) = ($!) findExit  updatedList (newIndex) (steps+1) (index updatedList newIndex) l
                                | otherwise = steps
-                               where (updatedList,newIndex) = (take i list ++ [stepSize+1] ++ drop (i+1) list, (i+stepSize))
+                               where (updatedList,newIndex) = ((update i (stepSize+1) $ list), (i+stepSize))
+
+-- B
+
+findExitB :: Seq Int -> Int -> Int -> Int -> Int -> Int
+findExitB list i steps stepSize l | (i) < (l) && (i) >= (-1) = ($!) findExitB updatedList (newIndex) (steps+1) (index updatedList (newIndex)) l
+                                  | otherwise = steps
+                                where (updatedList,newIndex,incrementCount) = ((update i (stepSize+incrementCount) $ list),(i+stepSize),(if stepSize >= 3 then -1 else 1))
